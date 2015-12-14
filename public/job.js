@@ -32,12 +32,22 @@ function Job(data)
 
 function job_import(data)
 {
+    var guiscaleStr = getUrlVars()["guiscale"] ;
+    var minplayerwidthStr = getUrlVars()["minplayerwidth"];
+    var minplayerwidth = minplayerwidthStr != null ? parseFloat(minplayerwidthStr) : 720.0;
+    if (guiscaleStr == null)
+        var guiscale = 1.0;
+    else if (guiscaleStr === 'auto')
+        var guiscale = minplayerwidth/parseInt(data["width"]);
+    else
+        var guiscale = parseFloat(guiscaleStr);
+    console.log("Using guiscale " + guiscale)
     var job = new Job();
     job.slug = data["slug"];
     job.start = parseInt(data["start"]);
     job.stop = parseInt(data["stop"]);
-    job.width = parseInt(data["width"]);
-    job.height = parseInt(data["height"]);
+    job.width = guiscale*parseInt(data["width"]); // ME: add video scale in gui
+    job.height = guiscale*parseInt(data["height"]); // ME: add video scale in gui
     job.skip = parseInt(data["skip"]);
     job.perobject = parseFloat(data["perobject"]);
     job.completion = parseFloat(data["completion"]);
@@ -53,6 +63,8 @@ function job_import(data)
     job.multiobjecttrackers = data["trackers"]["multiobject"];
     job.nextid = parseInt(data["nextid"]);
     job.pointmode = parseInt(data["pointmode"]) ? true : false;
+    job.minplayerwidth = minplayerwidth;
+
 
     console.log("Job configured!");
     console.log("  Slug: " + job.slug);
@@ -65,6 +77,7 @@ function job_import(data)
     console.log("  Blow Radius: " + job.blowradius);
     console.log("  Training: " + job.training);
     console.log("  Job ID: " + job.jobid);
+    console.log("  Min Player Width: " + job.minplayerwidth)
     console.log("  Labels: ");
     for (var i in job.labels)
     {

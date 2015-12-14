@@ -66,10 +66,7 @@ function ui_setup(job)
           "</tr>" +
       "</table>").appendTo(screen).css("width", "100%");
 
-    $("<div id='defaultsdialog' title='New Object Defaults'></div>").appendTo(screen)
-
-    var playerwidth = Math.max(720, job.width);
-
+   var playerwidth = Math.max(job.minplayerwidth , job.width);
 
     $("#videoframe").css({"width": job.width + "px",
                           "height": job.height + "px",
